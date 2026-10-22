@@ -29,4 +29,6 @@ void main() {
   });
 }
 
-void formattingFailure(){print("CI should catch this");}
+void formattingFailure() {
+  print("CI should catch this");
+}
