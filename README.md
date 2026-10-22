@@ -1,107 +1,80 @@
 # Outspot
 
-Outspot is a Flutter mobile application.
+Outspot is a Flutter mobile application for discovering and sharing places.
 
-## Prerequisites
+## Requirements
 
-Install the following before starting:
-
-- Git
-- Flutter SDK (stable channel)
+- Flutter SDK
 - Android Studio
 - Android SDK and an Android emulator or compatible Android device
 
-Verify your setup:
+## Supported Platforms
 
-```bash
-flutter doctor
-```
+- Android
 
-## Android Configuration
+## Android Package Identifier
 
-- **Supported target:** Android
-- **Application ID:** `com.example.outspot`
+See the `applicationId` in `android/app/build.gradle` or `android/app/build.gradle.kts`.
 
-## Getting Started
+## Setup
 
-Clone the repository and enter its directory:
-
-```bash
-git clone https://github.com/0x3mr/outspot.git
-cd outspot
-```
-
-Install dependencies:
+From the repository root:
 
 ```bash
 flutter pub get
 ```
 
-Start an Android emulator or connect an Android device. Verify Flutter detects it:
+## Run
 
-```bash
-flutter devices
-```
-
-Run the app:
+Start an Android emulator or connect an Android device:
 
 ```bash
 flutter run
 ```
 
+To target a specific connected device:
+
+```bash
+flutter devices
+flutter run -d <device-id>
+```
+
+## Project Structure
+
+- `lib/main.dart` — application entry point and shared dependency setup.
+- `lib/core/navigation/app_routes.dart` — central route-name registry.
+- `lib/core/theme/` — shared theme resources.
+- `lib/core/widgets/` — reusable app-wide UI components.
+- `lib/models/` — shared `Spot`, `Profile`, and `Comment` models.
+- `lib/data/repositories/` — repository contract, mock implementation, and shared spot provider.
+- `lib/data/fixtures/` — local sample data used during development and testing.
+- `lib/features/auth/` — authentication feature.
+- `lib/features/feed/` — feed feature and spot-card/list widgets.
+- `lib/features/explore/` — explore feature and map-marker preview widget.
+- `lib/features/create_spot/` — create-spot feature.
+- `lib/features/profile/` — profile feature.
+- `lib/features/spot_detail/` — spot-detail feature and detail widget.
+- `test/` — automated widget and application tests.
+
+Feature folders may be expanded as their implementations are developed. Placeholder screens are scaffolding, not finished feature functionality.
+
+## Architecture and Integration Rules
+
+- Register application route names in `lib/core/navigation/app_routes.dart`.
+- Keep app-wide dependency setup in `lib/main.dart`; keep feature-specific UI and behavior inside the relevant feature folder.
+- Use the shared models in `lib/models/`. Do not define competing feature-specific versions of `Spot`, `Profile`, or `Comment`.
+- Features should access spot data through `SpotRepository` and its shared provider rather than implementing their own data access.
+- `MockSpotRepository` and local fixtures support development. A future Supabase-backed implementation should implement the same repository contract so UI widgets do not depend on the storage implementation.
+- Announce planned changes to `pubspec.yaml`, app startup, global routes, shared models, or shared theme in the team channel before editing those shared files.
+- Keep pull requests focused, identify the related issue, describe shared files changed, and include test evidence.
+- Feature owners and handoff assignments: **TBD**.
+
 ## Quality Checks
 
-Run these commands from the repository root before opening a pull request:
+Run before opening a pull request:
 
 ```bash
 dart format --output=none --set-exit-if-changed lib test
 flutter analyze
 flutter test
 ```
-
-GitHub Actions runs these checks on pushes to `main` and pull requests targeting `main`. A pull request should have passing checks before it is merged.
-
-## Branching Convention
-
-Create a separate branch for each task. Use the task type, issue identifier, and a short description.
-
-Examples:
-
-- `feat/P1-04-feed-ui`
-- `fix/P1-04-feed-loading`
-- `docs/P1-01-setup-guide`
-- `test/P1-01-ci-checks`
-
-Start branches from an up-to-date `main`:
-
-```bash
-git switch main
-git pull
-git switch -c feat/P1-04-feed-ui
-```
-
-Keep pull requests focused on one issue and link the relevant GitHub issue in the PR description.
-
-## Pull Requests
-
-When opening a pull request:
-
-- Link the GitHub issue being addressed.
-- Summarize the changes.
-- Report formatting, analyzer, and test results.
-- Include screenshots for UI changes.
-- Resolve review feedback and ensure CI passes before merging.
-
-Use the repository pull request template to guide submissions.
-
-## Secrets and Supabase Configuration
-
-Client-side Supabase configuration is not the same as a server secret.
-
-- A Supabase **publishable key** or legacy **anon key** is intended for client applications. Access must still be controlled with appropriate Row Level Security (RLS) policies.
-- A Supabase **service-role key** is privileged and must never be included in the Flutter app, shipped to users, or committed to Git.
-- Never commit passwords, access tokens, private signing keys, or other service credentials.
-- Keep local environment and secret configuration files out of version control. If a secret is accidentally committed, revoke or rotate it; deleting it in a later commit does not make the exposed secret safe.
-- Store deployment or server-side secrets in an appropriate secure environment, not in client-side Flutter code.
-
-Review `.gitignore` before adding local configuration files
