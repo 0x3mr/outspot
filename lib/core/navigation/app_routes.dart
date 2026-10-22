@@ -4,14 +4,24 @@ class AppRoutes {
   static const feed = '/';
   static const explore = '/explore';
   static const createSpot = '/create';
+  static const createSpotDetails = '/create/details';
+  static const saved = '/saved';
   static const profile = '/profile';
   static const spotDetail = '/spot-detail';
+  static const login = '/login';
+  static const signIn = '/sign-in';
+  static const register = '/register';
 
   static const titles = <String, String>{
     feed: 'Feed',
     explore: 'Explore',
     createSpot: 'Create Spot',
+    createSpotDetails: 'Add details',
+    saved: 'Saved',
     profile: 'Profile',
     spotDetail: 'Spot Detail',
+    login: 'Welcome',
+    signIn: 'Sign in',
+    register: 'Create account',
   };
 }

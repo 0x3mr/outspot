@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../core/navigation/app_router.dart';
 import '../core/navigation/app_routes.dart';
+import '../core/theme/app_theme.dart';
 
 class OutspotApp extends StatelessWidget {
   const OutspotApp({super.key});
@@ -10,11 +11,11 @@ class OutspotApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Outspot',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      initialRoute: AppRoutes.feed,
+      theme: AppTheme.light,
+      initialRoute: AppRoutes.login,
+      onGenerateInitialRoutes: (initialRoute) => [
+        AppRouter.onGenerateRoute(RouteSettings(name: initialRoute)),
+      ],
       onGenerateRoute: AppRouter.onGenerateRoute,
     );
   }

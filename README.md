@@ -42,11 +42,12 @@ flutter run -d <device-id>
 ## Project Structure
 
 - `lib/main.dart` — application entry point and shared dependency setup.
+- `lib/features/navigation/` — persistent main navigation shell.
 - `lib/app/outspot_app.dart` — the single `MaterialApp` shell and app-wide theme.
 - `lib/core/navigation/app_routes.dart` — central route-name and route-title registry.
 - `lib/core/navigation/app_router.dart` — the only named-route factory.
-- `lib/core/widgets/` — reusable app-wide UI components.
-- `lib/core/theme/` — shared theme resources.
+- `lib/core/theme/` — shared color, typography, and spacing tokens.
+- `lib/core/widgets/` — reusable buttons, form fields, tags, cards, loading, empty, and error states.
 - `lib/models/` — shared `Spot`, `Profile`, and `Comment` models.
 - `lib/data/repositories/` — repository contract, mock implementation, and shared spot provider.
 - `lib/data/fixtures/` — local sample data used during development and testing.
@@ -55,11 +56,18 @@ flutter run -d <device-id>
 - `lib/features/explore/` — explore screen and map-marker preview widget.
 - `lib/features/create_spot/` — create-spot screen and behavior.
 - `lib/features/profile/` — profile screen and behavior.
+- `lib/features/saved/` — saved places screen.
 - `lib/features/spot_detail/` — spot-detail screen and widget.
 - `lib/features/shared/` — temporary feature placeholders used while screens are built.
 - `test/` — automated widget and application tests.
 
-Feature folders may be expanded as their implementations are developed. Placeholder screens are scaffolding, not finished feature functionality. `OutspotApp` is the only app shell; register named screens in `AppRoutes.titles` and resolve them in `AppRouter`.
+`OutspotApp` is the only app shell; register named screens in `AppRoutes` and resolve them in `AppRouter`. Login and registration routes sit outside the main shell. The local preview offers entry into Feed, Explore, Create, Saved, and Profile without a backend session. Create begins at location selection and proceeds to a validated details form; the map and publish step are local UI previews.
+
+The main shell preserves Feed, Explore, Saved, and Profile tab state while switching destinations. Its centered Create action pushes the location-first flow, so Back returns to the prior tab. Spot cards open the matching detail route.
+
+Repository-backed screens should handle loading, empty, error, and data states with `AppLoadingIndicator`, `AppEmptyState`, and `AppErrorState`. Forms should use `AppTextField` validation and `AppSubmitButton` for disabled/submitting feedback. Feed currently exercises these states with the mock repository; Saved shows the shared empty state until saved items are wired.
+
+Shared controls live in `lib/core/widgets/`: `AppButton`, `AppTextField`, `AppTagChip`, `SpotCardShell`, page padding, and common state widgets. `AppTheme` and `AppSpacing` are the source for shared type, color, and spacing decisions. Feature screens live in their respective `lib/features/<feature>/screens/` folders. These are Phase 1 mock screens, not live authentication, map, image upload, or publishing behavior.
 
 ## Architecture and Integration Rules
 
