@@ -1,17 +1,41 @@
 # outspot
 
-A new Flutter project.
+Outspot is a Flutter mobile application.
 
-## Getting Started
+## Requirements
 
-This project is a starting point for a Flutter application.
+- Flutter SDK
+- Android Studio
+- Android SDK and an Android emulator or compatible Android device
 
-A few resources to get you started if this is your first Flutter project:
+## Supported Targets
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+- Android
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Android Package Identifier
+
+See the `applicationId` in `android/app/build.gradle` or `android/app/build.gradle.kts` for the configured Android application ID.
+
+## Setup
+
+From the repository root, run:
+
+```bash
+flutter pub get
+```
+
+## Run
+
+Start an Android emulator or connect an Android device, then run:
+
+```bash
+flutter run
+```
+
+## Analyze
+
+Run the Dart analyzer with:
+
+```bash
+flutter analyze
+```
