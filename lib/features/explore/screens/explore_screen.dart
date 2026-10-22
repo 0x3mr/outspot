@@ -25,8 +25,9 @@ class ExploreScreen extends StatelessWidget {
             Icon(
               Icons.map_outlined,
               size: 72,
-              color: Theme.of(context).colorScheme.primary
-                  .withValues(alpha: .5),
+              color: Theme.of(
+                context,
+              ).colorScheme.primary.withValues(alpha: .5),
             ),
             Positioned(
               top: 42,

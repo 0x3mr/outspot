@@ -10,7 +10,11 @@ class MockSpotRepository implements SpotRepository {
   final Set<String> _savedSpotIds = {};
 
   @override
-  Future<List<Spot>> listSpots() async => List.unmodifiable(_spots);
+  Future<List<Spot>> listSpots() async {
+    final sorted = List<Spot>.from(_spots)
+      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    return List.unmodifiable(sorted);
+  }
 
   @override
   Future<Spot?> getSpot(String id) async {

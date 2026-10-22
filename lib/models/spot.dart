@@ -12,6 +12,7 @@ class Spot {
     this.photoReference,
     this.tags = const [],
     this.budgetLabel,
+    this.likeCount = 0,
   });
 
   final String id;
@@ -24,4 +25,5 @@ class Spot {
   final String? photoReference;
   final List<String> tags;
   final String? budgetLabel;
+  final int? likeCount;
 }

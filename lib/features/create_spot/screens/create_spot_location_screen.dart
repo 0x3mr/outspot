@@ -43,8 +43,9 @@ class _CreateSpotLocationScreenState extends State<CreateSpotLocationScreen> {
                       Positioned.fill(
                         child: CustomPaint(
                           painter: _MapGridPainter(
-                            Theme.of(context).colorScheme.primary
-                                .withValues(alpha: .12),
+                            Theme.of(
+                              context,
+                            ).colorScheme.primary.withValues(alpha: .12),
                           ),
                         ),
                       ),
