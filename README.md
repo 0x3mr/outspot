@@ -42,32 +42,47 @@ flutter run -d <device-id>
 ## Project Structure
 
 - `lib/main.dart` — application entry point and shared dependency setup.
-- `lib/core/navigation/app_routes.dart` — central route-name registry.
-- `lib/core/theme/` — shared theme resources.
+- `lib/app/outspot_app.dart` — the single `MaterialApp` shell and app-wide theme.
+- `lib/core/navigation/app_routes.dart` — central route-name and route-title registry.
+- `lib/core/navigation/app_router.dart` — the only named-route factory.
 - `lib/core/widgets/` — reusable app-wide UI components.
+- `lib/core/theme/` — shared theme resources.
 - `lib/models/` — shared `Spot`, `Profile`, and `Comment` models.
 - `lib/data/repositories/` — repository contract, mock implementation, and shared spot provider.
 - `lib/data/fixtures/` — local sample data used during development and testing.
-- `lib/features/auth/` — authentication feature.
-- `lib/features/feed/` — feed feature and spot-card/list widgets.
-- `lib/features/explore/` — explore feature and map-marker preview widget.
-- `lib/features/create_spot/` — create-spot feature.
-- `lib/features/profile/` — profile feature.
-- `lib/features/spot_detail/` — spot-detail feature and detail widget.
+- `lib/features/auth/` — authentication screens and behavior.
+- `lib/features/feed/` — feed screen and spot-card/list widgets.
+- `lib/features/explore/` — explore screen and map-marker preview widget.
+- `lib/features/create_spot/` — create-spot screen and behavior.
+- `lib/features/profile/` — profile screen and behavior.
+- `lib/features/spot_detail/` — spot-detail screen and widget.
+- `lib/features/shared/` — temporary feature placeholders used while screens are built.
 - `test/` — automated widget and application tests.
 
-Feature folders may be expanded as their implementations are developed. Placeholder screens are scaffolding, not finished feature functionality.
+Feature folders may be expanded as their implementations are developed. Placeholder screens are scaffolding, not finished feature functionality. `OutspotApp` is the only app shell; register named screens in `AppRoutes.titles` and resolve them in `AppRouter`.
 
 ## Architecture and Integration Rules
 
-- Register application route names in `lib/core/navigation/app_routes.dart`.
-- Keep app-wide dependency setup in `lib/main.dart`; keep feature-specific UI and behavior inside the relevant feature folder.
+- Register application route names in `lib/core/navigation/app_routes.dart` and resolve them only in `lib/core/navigation/app_router.dart`.
+- Keep app-wide dependency setup in `lib/main.dart`, the single app shell in `lib/app/outspot_app.dart`, and feature-specific UI and behavior inside the relevant feature folder.
 - Use the shared models in `lib/models/`. Do not define competing feature-specific versions of `Spot`, `Profile`, or `Comment`.
 - Features should access spot data through `SpotRepository` and its shared provider rather than implementing their own data access.
 - `MockSpotRepository` and local fixtures support development. A future Supabase-backed implementation should implement the same repository contract so UI widgets do not depend on the storage implementation.
-- Announce planned changes to `pubspec.yaml`, app startup, global routes, shared models, or shared theme in the team channel before editing those shared files.
-- Keep pull requests focused, identify the related issue, describe shared files changed, and include test evidence.
-- Feature owners and handoff assignments: **TBD**.
+- Announce planned changes to `pubspec.yaml`, app startup, global routes, shared models, or shared theme in the team channel before editing those shared files. The integration coordinator owns these shared integration points.
+- Keep pull requests focused, identify the related issue, describe shared files changed, and include test evidence. Before a UI PR is reviewed, its owner, shared files changed, and test evidence must be visible in the PR.
+
+### Default workstream ownership and handoff
+
+Each workstream has one default owner at a time. The team maps the contributor slots to names on the project board before parallel feature work starts; a PR author is responsible for recording the actual owner and handoff there.
+
+| Workstream | Default owner | Scope and integration point |
+| --- | --- | --- |
+| Feed and profile | Contributor A | `lib/features/feed/`, `lib/features/profile/`; consume shared models and `SpotRepository`. |
+| Explore and spot detail | Contributor B | `lib/features/explore/`, `lib/features/spot_detail/`; consume shared models and `SpotRepository`. |
+| Create spot and auth | Contributor C | `lib/features/create_spot/`, `lib/features/auth/`; use shared models and repository contracts. |
+| App integration | Integration coordinator | `lib/main.dart`, `lib/app/`, `lib/core/navigation/`, `lib/core/theme/`, `lib/models/`, `lib/data/repositories/`, and `pubspec.yaml`. Announce changes to shared files before editing. |
+
+For handoff, the current owner opens a focused PR with the related task, changed shared files, route/repository integration points, and test evidence. The next owner takes over after review and records the new owner on the project board. Avoid concurrent edits to the integration coordinator's shared files; coordinate those changes in the team channel first.
 
 ## Quality Checks
 

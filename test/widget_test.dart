@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:outspot/app/outspot_app.dart';
 import 'package:outspot/core/navigation/app_routes.dart';
-import 'package:outspot/main.dart';
+import 'package:outspot/features/shared/feature_placeholder_screen.dart';
 
 void main() {
   testWidgets('feed route opens by default', (tester) async {
@@ -28,7 +29,7 @@ void main() {
       navigator.pushNamed(route);
       await tester.pumpAndSettle();
 
-      expect(find.byType(PlaceholderScreen), findsOneWidget);
+      expect(find.byType(FeaturePlaceholderScreen), findsOneWidget);
 
       navigator.pop();
       await tester.pumpAndSettle();

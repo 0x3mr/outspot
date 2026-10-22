@@ -6,4 +6,12 @@ class AppRoutes {
   static const createSpot = '/create';
   static const profile = '/profile';
   static const spotDetail = '/spot-detail';
+
+  static const titles = <String, String>{
+    feed: 'Feed',
+    explore: 'Explore',
+    createSpot: 'Create Spot',
+    profile: 'Profile',
+    spotDetail: 'Spot Detail',
+  };
 }
