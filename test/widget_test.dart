@@ -28,7 +28,3 @@ void main() {
     expect(find.text('1'), findsOneWidget);
   });
 }
-
-void formattingFailure() {
-  print("CI should catch this");
-}
