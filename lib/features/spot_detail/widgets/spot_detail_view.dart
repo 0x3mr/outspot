@@ -262,9 +262,7 @@ class SpotDetailView extends StatelessWidget {
             Wrap(
               spacing: AppSpacing.xs,
               runSpacing: AppSpacing.xs,
-              children: [
-                for (final tag in spot.tags) AppTagChip(label: tag),
-              ],
+              children: [for (final tag in spot.tags) AppTagChip(label: tag)],
             ),
           ],
         ],
@@ -298,14 +296,16 @@ class SpotDetailView extends StatelessWidget {
           _SocialActionButton(
             icon: Icons.bookmark_border_rounded,
             label: 'Save',
-            onTap: () => _showMockNotice(context, 'Saving will sync in Phase 2'),
+            onTap: () =>
+                _showMockNotice(context, 'Saving will sync in Phase 2'),
           ),
 
           // Comment Action Button (Mock)
           _SocialActionButton(
             icon: Icons.chat_bubble_outline_rounded,
             label: 'Comment',
-            onTap: () => _showMockNotice(context, 'Comments will sync in Phase 2'),
+            onTap: () =>
+                _showMockNotice(context, 'Comments will sync in Phase 2'),
           ),
 
           // Share Action Button (Mock)
@@ -332,10 +332,7 @@ class SpotDetailView extends StatelessWidget {
   }
 
   // --- Helper Widget 4: Comments Section ---
-  Widget _buildCommentsSection(
-      BuildContext context,
-      List<Comment> comments,
-      ) {
+  Widget _buildCommentsSection(BuildContext context, List<Comment> comments) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -402,7 +399,8 @@ class SpotDetailView extends StatelessWidget {
                         radius: 14,
                         backgroundColor: AppColors.softLavender,
                         child: Text(
-                          comment.author.username.characters.first.toUpperCase(),
+                          comment.author.username.characters.first
+                              .toUpperCase(),
                           style: const TextStyle(
                             color: AppColors.deepViolet,
                             fontWeight: FontWeight.w800,
