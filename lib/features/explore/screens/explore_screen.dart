@@ -227,10 +227,7 @@ class _SpotPin extends StatelessWidget {
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             gradient: AppColors.primaryGradient,
-            border: Border.all(
-              color: Colors.white,
-              width: isSelected ? 3 : 2,
-            ),
+            border: Border.all(color: Colors.white, width: isSelected ? 3 : 2),
             boxShadow: [
               if (isSelected) AppColors.glowShadow,
               const BoxShadow(
@@ -240,19 +237,13 @@ class _SpotPin extends StatelessWidget {
               ),
             ],
           ),
-          child: const Icon(
-            Icons.place_rounded,
-            color: Colors.white,
-            size: 16,
-          ),
+          child: const Icon(Icons.place_rounded, color: Colors.white, size: 16),
         ),
         // Small triangle pointer beneath the circle.
         CustomPaint(
           size: const Size(10, 6),
           painter: _PinPointerPainter(
-            color: isSelected
-                ? AppColors.deepViolet
-                : AppColors.electricPurple,
+            color: isSelected ? AppColors.deepViolet : AppColors.electricPurple,
           ),
         ),
       ],
@@ -313,10 +304,7 @@ class _MapActionButton extends StatelessWidget {
 
 /// Preview card that slides up from the bottom when a marker is tapped.
 class _BottomPreviewCard extends StatelessWidget {
-  const _BottomPreviewCard({
-    required this.spot,
-    required this.onClose,
-  });
+  const _BottomPreviewCard({required this.spot, required this.onClose});
 
   final Spot spot;
   final VoidCallback onClose;
@@ -327,9 +315,7 @@ class _BottomPreviewCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surfaceWhite,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
-        border: const Border(
-          top: BorderSide(color: AppColors.softBorder),
-        ),
+        border: const Border(top: BorderSide(color: AppColors.softBorder)),
         boxShadow: const [
           BoxShadow(
             color: Color(0x1A000000),
