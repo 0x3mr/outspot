@@ -118,6 +118,79 @@ void main() {
   });
 
   testWidgets(
+    'photo selection, required place name, and caption form validation',
+    (tester) async {
+      await tester.pumpWidget(_testApp());
+      await tester.tap(find.text('Explore the preview'));
+      await tester.pumpAndSettle();
+
+      await tester.tap(find.byTooltip('Create a spot'));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Confirm location'));
+      await tester.pumpAndSettle();
+
+      // Verify missing-image state initially
+      expect(find.text('No photo selected yet'), findsOneWidget);
+      expect(find.text('Take Photo'), findsOneWidget);
+      expect(find.text('Choose from Gallery'), findsOneWidget);
+
+      // Select a photo and verify preview appears
+      await tester.tap(find.text('Take Photo'));
+      await tester.pumpAndSettle();
+      expect(find.text('Photo ready to upload'), findsOneWidget);
+
+      // Remove photo and verify return to empty state
+      await tester.tap(find.byTooltip('Remove photo'));
+      await tester.pumpAndSettle();
+      expect(find.text('No photo selected yet'), findsOneWidget);
+
+      // Enter caption only, leaving place name empty
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'Caption'),
+        'An awesome sunset view spot.',
+      );
+      await tester.pumpAndSettle();
+
+      // Scroll down and tap preview without place name -> triggers required place name error
+      await tester.drag(find.byType(ListView), const Offset(0, -300));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Preview spot'));
+      await tester.pumpAndSettle();
+      expect(find.text('Add a name for your spot'), findsOneWidget);
+
+      // Scroll back up to fill in required place name
+      await tester.drag(find.byType(ListView), const Offset(0, 300));
+      await tester.pumpAndSettle();
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'Place name'),
+        'Cairo Sky Garden',
+      );
+      await tester.pumpAndSettle();
+
+      // Scroll down and preview succeeds
+      await tester.drag(find.byType(ListView), const Offset(0, -300));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Preview spot'));
+      await tester.pumpAndSettle();
+      expect(
+        find.text('Your spot is ready for the next step.'),
+        findsOneWidget,
+      );
+
+      // Test long caption limit (> 280 chars) disables submit
+      final longCaption = 'A' * 285;
+      await tester.enterText(
+        find.widgetWithText(TextFormField, 'Caption'),
+        longCaption,
+      );
+      await tester.pumpAndSettle();
+      expect(find.textContaining('285 / 280'), findsOneWidget);
+      final submitButton = find.widgetWithText(FilledButton, 'Preview spot');
+      expect(tester.widget<FilledButton>(submitButton).enabled, isFalse);
+    },
+  );
+
+  testWidgets(
     'feed cards open their matching detail and back returns to feed',
     (tester) async {
       await tester.pumpWidget(_testApp());
