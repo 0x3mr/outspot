@@ -65,8 +65,8 @@ class _CreateSpotLocationScreenState extends State<CreateSpotLocationScreen> {
             Text(
               'Pan and zoom the map to place the pin at the exact spot.',
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: Theme.of(context).colorScheme.onSurfaceVariant,
-                  ),
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
             ),
             const SizedBox(height: AppSpacing.md),
 
@@ -143,10 +143,9 @@ class _CreateSpotLocationScreenState extends State<CreateSpotLocationScreen> {
                           vertical: AppSpacing.xs,
                         ),
                         decoration: BoxDecoration(
-                          color: Theme.of(context)
-                              .colorScheme
-                              .surface
-                              .withValues(alpha: 0.95),
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.surface.withValues(alpha: 0.95),
                           borderRadius: BorderRadius.circular(12),
                           border: Border.all(
                             color: Theme.of(context).colorScheme.outlineVariant,
@@ -171,9 +170,7 @@ class _CreateSpotLocationScreenState extends State<CreateSpotLocationScreen> {
                             Text(
                               '${_selectedLocation.latitude.toStringAsFixed(4)}°, '
                               '${_selectedLocation.longitude.toStringAsFixed(4)}°',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .labelMedium
+                              style: Theme.of(context).textTheme.labelMedium
                                   ?.copyWith(fontWeight: FontWeight.bold),
                             ),
                           ],

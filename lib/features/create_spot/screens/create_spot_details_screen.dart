@@ -55,56 +55,56 @@ class _CreateSpotDetailsScreenState extends State<CreateSpotDetailsScreen> {
                 ),
               ],
             ),
-          const SizedBox(height: AppSpacing.lg),
-          AppTextField(
-            label: 'Caption',
-            hintText: 'What should people know about this place?',
-            controller: _captionController,
-            maxLines: 4,
-            onChanged: (_) => setState(() {}),
-            validator: (value) => value == null || value.trim().isEmpty
-                ? 'Add a caption for your spot'
-                : null,
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          Text(
-            'Add a few tags',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          Wrap(
-            spacing: AppSpacing.xs,
-            runSpacing: AppSpacing.xs,
-            children: [
-              for (final tag in const ['Cafe', 'Outdoors', 'Food', 'Quiet'])
-                AppTagChip(
-                  label: tag,
-                  selected: _selectedTags.contains(tag),
-                  onSelected: (selected) => setState(() {
-                    if (selected) {
-                      _selectedTags.add(tag);
-                    } else {
-                      _selectedTags.remove(tag);
-                    }
-                  }),
-                ),
+            const SizedBox(height: AppSpacing.lg),
+            AppTextField(
+              label: 'Caption',
+              hintText: 'What should people know about this place?',
+              controller: _captionController,
+              maxLines: 4,
+              onChanged: (_) => setState(() {}),
+              validator: (value) => value == null || value.trim().isEmpty
+                  ? 'Add a caption for your spot'
+                  : null,
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            Text(
+              'Add a few tags',
+              style: Theme.of(context).textTheme.titleMedium,
+            ),
+            const SizedBox(height: AppSpacing.xs),
+            Wrap(
+              spacing: AppSpacing.xs,
+              runSpacing: AppSpacing.xs,
+              children: [
+                for (final tag in const ['Cafe', 'Outdoors', 'Food', 'Quiet'])
+                  AppTagChip(
+                    label: tag,
+                    selected: _selectedTags.contains(tag),
+                    onSelected: (selected) => setState(() {
+                      if (selected) {
+                        _selectedTags.add(tag);
+                      } else {
+                        _selectedTags.remove(tag);
+                      }
+                    }),
+                  ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            AppSubmitButton(
+              label: 'Preview spot',
+              enabled: _captionController.text.trim().isNotEmpty,
+              onPressed: _preview,
+            ),
+            if (_feedback != null) ...[
+              const SizedBox(height: AppSpacing.sm),
+              AppInlineValidationMessage(message: _feedback!),
             ],
-          ),
-          const SizedBox(height: AppSpacing.lg),
-          AppSubmitButton(
-            label: 'Preview spot',
-            enabled: _captionController.text.trim().isNotEmpty,
-            onPressed: _preview,
-          ),
-          if (_feedback != null) ...[
-            const SizedBox(height: AppSpacing.sm),
-            AppInlineValidationMessage(message: _feedback!),
           ],
-        ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 
   void _preview() {
     if (!_formKey.currentState!.validate()) return;
