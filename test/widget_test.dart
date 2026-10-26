@@ -207,10 +207,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(find.text('Preview spot'));
       await tester.pumpAndSettle();
-      await tester.drag(
-        find.byType(ListView).last,
-        const Offset(0, -300),
-      );
+      await tester.drag(find.byType(ListView).last, const Offset(0, -300));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Publish spot'));
       await tester.pumpAndSettle();
