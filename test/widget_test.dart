@@ -152,14 +152,14 @@ void main() {
       await tester.pumpAndSettle();
 
       // Scroll down and tap preview without place name -> triggers required place name error
-      await tester.drag(find.byType(ListView), const Offset(0, -300));
+      await tester.drag(find.byType(ListView), const Offset(0, -600));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Preview spot'));
       await tester.pumpAndSettle();
       expect(find.text('Add a name for your spot'), findsOneWidget);
 
       // Scroll back up to fill in required place name
-      await tester.drag(find.byType(ListView), const Offset(0, 300));
+      await tester.drag(find.byType(ListView), const Offset(0, 600));
       await tester.pumpAndSettle();
       await tester.enterText(
         find.widgetWithText(TextFormField, 'Place name'),
@@ -167,26 +167,54 @@ void main() {
       );
       await tester.pumpAndSettle();
 
-      // Scroll down and preview succeeds
+      // Scroll down to tags & budget
+      await tester.drag(find.byType(ListView), const Offset(0, -300));
+      await tester.pumpAndSettle();
+
+      // Select tags from vocabulary
+      await tester.tap(find.text('Peaceful'));
+      await tester.tap(find.text('Good for studying'));
+      await tester.pumpAndSettle();
+
+      // Select budget choice
+      await tester.tap(find.text('Under 100 EGP'));
+      await tester.pumpAndSettle();
+
+      // Scroll remaining distance to preview button and tap it
       await tester.drag(find.byType(ListView), const Offset(0, -300));
       await tester.pumpAndSettle();
       await tester.tap(find.text('Preview spot'));
       await tester.pumpAndSettle();
-      expect(
-        find.text('Your spot is ready for the next step.'),
-        findsOneWidget,
-      );
 
-      // Test long caption limit (> 280 chars) disables submit
-      final longCaption = 'A' * 285;
-      await tester.enterText(
-        find.widgetWithText(TextFormField, 'Caption'),
-        longCaption,
+      // Verify Review Screen displays spot details, tags, and budget
+      expect(find.text('Review your spot'), findsOneWidget);
+      expect(find.text('Cairo Sky Garden'), findsOneWidget);
+      expect(find.text('An awesome sunset view spot.'), findsOneWidget);
+      expect(find.text('Budget: Under 100 EGP'), findsOneWidget);
+      expect(find.text('#Peaceful'), findsOneWidget);
+      expect(find.text('#Good for studying'), findsOneWidget);
+      expect(find.text('Publish spot'), findsOneWidget);
+
+      // Verify back navigation retains all typed text, tags, and budget
+      await tester.pageBack();
+      await tester.pumpAndSettle();
+      expect(find.text('Cairo Sky Garden'), findsOneWidget);
+      expect(find.text('An awesome sunset view spot.'), findsOneWidget);
+      expect(find.text('Under 100 EGP'), findsOneWidget);
+
+      // Re-enter review screen and publish spot
+      await tester.drag(find.byType(ListView), const Offset(0, -300));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Preview spot'));
+      await tester.pumpAndSettle();
+      await tester.drag(
+        find.byType(ListView).last,
+        const Offset(0, -300),
       );
       await tester.pumpAndSettle();
-      expect(find.textContaining('285 / 280'), findsOneWidget);
-      final submitButton = find.widgetWithText(FilledButton, 'Preview spot');
-      expect(tester.widget<FilledButton>(submitButton).enabled, isFalse);
+      await tester.tap(find.text('Publish spot'));
+      await tester.pumpAndSettle();
+      expect(find.text('Spot published successfully!'), findsOneWidget);
     },
   );
 

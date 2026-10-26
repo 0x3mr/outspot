@@ -4,6 +4,7 @@ import '../../features/auth/screens/auth_entry_screen.dart';
 import '../../features/auth/screens/register_screen.dart';
 import '../../features/create_spot/screens/create_spot_details_screen.dart';
 import '../../features/create_spot/screens/create_spot_location_screen.dart';
+import '../../features/create_spot/screens/create_spot_review_screen.dart';
 import '../../features/navigation/main_navigation_shell.dart';
 import '../../features/shared/feature_placeholder_screen.dart';
 import '../../features/spot_detail/widgets/spot_detail_view.dart';
@@ -22,6 +23,11 @@ class AppRouter {
       AppRoutes.explore => const MainNavigationShell(initialIndex: 1),
       AppRoutes.createSpot => const CreateSpotLocationScreen(),
       AppRoutes.createSpotDetails => const CreateSpotDetailsScreen(),
+      AppRoutes.createSpotReview
+          when settings.arguments is CreateSpotReviewArgs =>
+        CreateSpotReviewScreen(
+          args: settings.arguments! as CreateSpotReviewArgs,
+        ),
       AppRoutes.saved => const MainNavigationShell(initialIndex: 2),
       AppRoutes.profile => const MainNavigationShell(initialIndex: 3),
       AppRoutes.spotDetail when settings.arguments is Spot => SpotDetailPage(

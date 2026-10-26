@@ -5,6 +5,7 @@ class AppRoutes {
   static const explore = '/explore';
   static const createSpot = '/create';
   static const createSpotDetails = '/create/details';
+  static const createSpotReview = '/create/review';
   static const saved = '/saved';
   static const profile = '/profile';
   static const spotDetail = '/spot-detail';
@@ -17,6 +18,7 @@ class AppRoutes {
     explore: 'Explore',
     createSpot: 'Create Spot',
     createSpotDetails: 'Add details',
+    createSpotReview: 'Review spot',
     saved: 'Saved',
     profile: 'Profile',
     spotDetail: 'Spot Detail',

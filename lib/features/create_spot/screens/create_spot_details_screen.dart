@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:latlong2/latlong.dart';
 
+import '../../../core/navigation/app_routes.dart';
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/widgets/app_state_widgets.dart';
 import '../../../core/widgets/app_tag_chip.dart';
 import '../../../core/widgets/app_text_field.dart';
+import 'create_spot_review_screen.dart';
 
 class CreateSpotDetailsScreen extends StatefulWidget {
   const CreateSpotDetailsScreen({super.key});
@@ -20,6 +22,24 @@ class _CreateSpotDetailsScreenState extends State<CreateSpotDetailsScreen> {
   final _captionController = TextEditingController();
   final _selectedTags = <String>{};
   static const int _maxCaptionLength = 280;
+
+  static const List<String> availableTags = [
+    'Peaceful',
+    'Good for studying',
+    'Affordable',
+    'Outdoor',
+    'Quiet',
+  ];
+
+  static const List<String> budgetOptions = [
+    'Free',
+    'Under 100 EGP',
+    '100–300 EGP',
+    '300+ EGP',
+    'Not specified',
+  ];
+
+  String _selectedBudget = 'Not specified';
   String? _selectedPhoto;
   String? _feedback;
 
@@ -126,22 +146,13 @@ class _CreateSpotDetailsScreenState extends State<CreateSpotDetailsScreen> {
               ),
             ),
             const SizedBox(height: AppSpacing.md),
-            Text(
-              'Add a few tags',
-              style: Theme.of(context).textTheme.titleMedium,
-            ),
+            Text('Add tags', style: Theme.of(context).textTheme.titleMedium),
             const SizedBox(height: AppSpacing.xs),
             Wrap(
               spacing: AppSpacing.xs,
               runSpacing: AppSpacing.xs,
               children: [
-                for (final tag in const [
-                  'Cafe',
-                  'Outdoors',
-                  'Food',
-                  'Quiet',
-                  'Views',
-                ])
+                for (final tag in availableTags)
                   AppTagChip(
                     label: tag,
                     selected: _selectedTags.contains(tag),
@@ -152,6 +163,25 @@ class _CreateSpotDetailsScreenState extends State<CreateSpotDetailsScreen> {
                         _selectedTags.remove(tag);
                       }
                     }),
+                  ),
+              ],
+            ),
+            const SizedBox(height: AppSpacing.md),
+            Text('Budget', style: Theme.of(context).textTheme.titleMedium),
+            const SizedBox(height: AppSpacing.xs),
+            Wrap(
+              spacing: AppSpacing.xs,
+              runSpacing: AppSpacing.xs,
+              children: [
+                for (final budget in budgetOptions)
+                  ChoiceChip(
+                    label: Text(budget),
+                    selected: _selectedBudget == budget,
+                    onSelected: (selected) {
+                      if (selected) {
+                        setState(() => _selectedBudget = budget);
+                      }
+                    },
                   ),
               ],
             ),
@@ -281,6 +311,20 @@ class _CreateSpotDetailsScreenState extends State<CreateSpotDetailsScreen> {
 
   void _preview() {
     if (!_formKey.currentState!.validate()) return;
-    setState(() => _feedback = 'Your spot is ready for the next step.');
+
+    final coordinates = ModalRoute.of(context)?.settings.arguments as LatLng?;
+
+    Navigator.pushNamed(
+      context,
+      AppRoutes.createSpotReview,
+      arguments: CreateSpotReviewArgs(
+        placeName: _placeNameController.text.trim(),
+        caption: _captionController.text.trim(),
+        coordinates: coordinates,
+        photoReference: _selectedPhoto,
+        tags: _selectedTags.toList(),
+        budget: _selectedBudget,
+      ),
+    );
   }
 }
