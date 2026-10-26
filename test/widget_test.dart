@@ -86,13 +86,35 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.byType(CreateSpotLocationScreen), findsOneWidget);
     expect(find.text('Choose a location'), findsOneWidget);
+    expect(find.textContaining('30.0370°'), findsOneWidget);
 
-    await tester.tap(find.text('Tap to place a pin'));
-    await tester.pumpAndSettle();
-    expect(find.text('Downtown Cairo'), findsOneWidget);
-    await tester.tap(find.text('Continue'));
+    await tester.tap(find.text('Confirm location'));
     await tester.pumpAndSettle();
     expect(find.text('Caption'), findsOneWidget);
+    expect(find.textContaining('30.0370°'), findsOneWidget);
+  });
+
+  testWidgets('location selector retains coordinates when navigating back', (
+    tester,
+  ) async {
+    await tester.pumpWidget(_testApp());
+    await tester.tap(find.text('Explore the preview'));
+    await tester.pumpAndSettle();
+
+    await tester.tap(find.byTooltip('Create a spot'));
+    await tester.pumpAndSettle();
+    expect(find.textContaining('30.0370°'), findsOneWidget);
+
+    await tester.tap(find.text('Confirm location'));
+    await tester.pumpAndSettle();
+    expect(find.text('Caption'), findsOneWidget);
+    expect(find.textContaining('30.0370°'), findsOneWidget);
+
+    await tester.pageBack();
+    await tester.pumpAndSettle();
+
+    expect(find.byType(CreateSpotLocationScreen), findsOneWidget);
+    expect(find.textContaining('30.0370°'), findsOneWidget);
   });
 
   testWidgets(
@@ -132,9 +154,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
 
-    await tester.tap(find.text('Tap to place a pin'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Continue'));
+    await tester.tap(find.text('Confirm location'));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });
@@ -154,9 +174,7 @@ void main() {
 
     await tester.tap(find.byTooltip('Create a spot'));
     await tester.pumpAndSettle();
-    await tester.tap(find.text('Tap to place a pin'));
-    await tester.pumpAndSettle();
-    await tester.tap(find.text('Continue'));
+    await tester.tap(find.text('Confirm location'));
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
   });

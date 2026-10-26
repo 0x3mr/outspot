@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:latlong2/latlong.dart';
 
 import '../../../core/theme/app_spacing.dart';
 import '../../../core/widgets/app_state_widgets.dart';
@@ -26,17 +27,34 @@ class _CreateSpotDetailsScreenState extends State<CreateSpotDetailsScreen> {
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: const Text('Add spot details')),
-    body: Form(
-      key: _formKey,
-      child: ListView(
-        padding: AppSpacing.page,
-        children: [
-          Text(
-            'Downtown Cairo',
-            style: Theme.of(context).textTheme.titleMedium,
-          ),
+  Widget build(BuildContext context) {
+    final coordinates = ModalRoute.of(context)?.settings.arguments as LatLng?;
+
+    return Scaffold(
+      appBar: AppBar(title: const Text('Add spot details')),
+      body: Form(
+        key: _formKey,
+        child: ListView(
+          padding: AppSpacing.page,
+          children: [
+            Row(
+              children: [
+                Icon(
+                  Icons.location_on,
+                  size: 20,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                const SizedBox(width: AppSpacing.xs),
+                Expanded(
+                  child: Text(
+                    coordinates != null
+                        ? 'Selected (${coordinates.latitude.toStringAsFixed(4)}°, ${coordinates.longitude.toStringAsFixed(4)}°)'
+                        : 'Downtown Cairo',
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                ),
+              ],
+            ),
           const SizedBox(height: AppSpacing.lg),
           AppTextField(
             label: 'Caption',
@@ -86,6 +104,7 @@ class _CreateSpotDetailsScreenState extends State<CreateSpotDetailsScreen> {
       ),
     ),
   );
+}
 
   void _preview() {
     if (!_formKey.currentState!.validate()) return;
