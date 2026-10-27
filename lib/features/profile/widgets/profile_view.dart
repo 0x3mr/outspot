@@ -20,6 +20,7 @@ class ProfileView extends StatelessWidget {
     this.onEditProfile,
     this.onOpenSpot,
     this.onCreateSpot,
+    this.onOpenSaved,
   });
 
   final Profile profile;
@@ -28,6 +29,7 @@ class ProfileView extends StatelessWidget {
   final VoidCallback? onEditProfile;
   final ValueChanged<Spot>? onOpenSpot;
   final VoidCallback? onCreateSpot;
+  final VoidCallback? onOpenSaved;
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +105,10 @@ class ProfileView extends StatelessWidget {
                 style: AppButtonStyle.secondary,
                 onPressed: onEditProfile,
               ),
+              if (onOpenSaved != null) ...[
+                const SizedBox(height: AppSpacing.sm),
+                _SavedPlacesLink(onTap: onOpenSaved!),
+              ],
             ],
           ),
         ),
@@ -160,6 +166,32 @@ class _ProfileStats extends StatelessWidget {
           child: _ProfileStat(value: likesReceived, label: 'Likes received'),
         ),
       ],
+    ),
+  );
+}
+
+class _SavedPlacesLink extends StatelessWidget {
+  const _SavedPlacesLink({required this.onTap});
+
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Material(
+    color: AppColors.surfaceWhite,
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(20),
+      side: const BorderSide(color: AppColors.softBorder),
+    ),
+    clipBehavior: Clip.antiAlias,
+    child: ListTile(
+      onTap: onTap,
+      leading: const Icon(
+        Icons.bookmark_rounded,
+        color: AppColors.electricPurple,
+      ),
+      title: const Text('Saved places'),
+      subtitle: const Text('Only visible to you'),
+      trailing: const Icon(Icons.chevron_right_rounded),
     ),
   );
 }

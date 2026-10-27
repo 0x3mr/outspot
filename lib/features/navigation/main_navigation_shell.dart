@@ -14,6 +14,15 @@ class MainNavigationShell extends StatefulWidget {
 
   final int initialIndex;
 
+  static const savedTabIndex = 2;
+
+  /// Switches the enclosing shell to [index]; returns false outside a shell.
+  static bool selectTab(BuildContext context, int index) {
+    final shell = context.findAncestorStateOfType<_MainNavigationShellState>();
+    shell?._selectTab(index);
+    return shell != null;
+  }
+
   @override
   State<MainNavigationShell> createState() => _MainNavigationShellState();
 }

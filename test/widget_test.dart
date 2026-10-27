@@ -67,7 +67,7 @@ void main() {
 
     await tester.tap(find.text('Saved').last);
     await tester.pumpAndSettle();
-    expect(find.text('Your saved spots live here'), findsOneWidget);
+    expect(find.text('Sample Garden'), findsOneWidget);
 
     await tester.tap(find.text('Profile').last);
     await tester.pumpAndSettle();
