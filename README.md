@@ -51,23 +51,78 @@ flutter run -d <device-id>
 - `lib/models/` — shared `Spot`, `Profile`, and `Comment` models.
 - `lib/data/repositories/` — repository contract, mock implementation, and shared spot provider.
 - `lib/data/fixtures/` — local sample data used during development and testing.
-- `lib/features/auth/` — authentication screens and behavior.
+- `lib/features/auth/` — authentication screens and shared `AuthValidators`.
 - `lib/features/feed/` — feed screen and spot-card/list widgets.
 - `lib/features/explore/` — explore screen and map-marker preview widget.
 - `lib/features/create_spot/` — create-spot screen and behavior.
-- `lib/features/profile/` — profile screen and behavior.
-- `lib/features/saved/` — saved places screen.
+- `lib/features/profile/` — profile and edit-profile screens, profile view and avatar widgets.
+- `lib/features/saved/` — Saved Places screen.
 - `lib/features/spot_detail/` — spot-detail screen and widget.
 - `lib/features/shared/` — temporary feature placeholders used while screens are built.
-- `test/` — automated widget and application tests.
+- `test/` — automated unit, widget, and application tests.
+- `docs/` — project concept and milestone plan (`phase-1-concept.md`) and app screenshots.
 
 `OutspotApp` is the only app shell; register named screens in `AppRoutes` and resolve them in `AppRouter`. Login and registration routes sit outside the main shell. The local preview offers entry into Feed, Explore, Create, Saved, and Profile without a backend session. Create begins at location selection and proceeds to a validated details form; the map and publish step are local UI previews.
 
 The main shell preserves Feed, Explore, Saved, and Profile tab state while switching destinations. Its centered Create action pushes the location-first flow, so Back returns to the prior tab. Spot cards open the matching detail route.
 
-Repository-backed screens should handle loading, empty, error, and data states with `AppLoadingIndicator`, `AppEmptyState`, and `AppErrorState`. Forms should use `AppTextField` validation and `AppSubmitButton` for disabled/submitting feedback. Feed currently exercises these states with the mock repository; Saved shows the shared empty state until saved items are wired.
+Repository-backed screens should handle loading, empty, error, and data states with `AppLoadingIndicator`, `AppEmptyState`, and `AppErrorState`. Forms should use `AppTextField` validation and `AppSubmitButton` for disabled/submitting feedback. Feed and Saved exercise these states with the mock repository.
 
 Shared controls live in `lib/core/widgets/`: `AppButton`, `AppTextField`, `AppTagChip`, `SpotCardShell`, page padding, and common state widgets. `AppTheme` and `AppSpacing` are the source for shared type, color, and spacing decisions. Feature screens live in their respective `lib/features/<feature>/screens/` folders. These are Phase 1 mock screens, not live authentication, map, image upload, or publishing behavior.
+
+## Phase 1 Screens
+
+| Welcome | Create account | Feed | Spot detail | Explore |
+| --- | --- | --- | --- | --- |
+| ![Welcome](docs/screenshots/01-welcome.jpg) | ![Create account validation](docs/screenshots/02-register-validation.jpg) | ![Feed](docs/screenshots/03-feed.jpg) | ![Spot detail](docs/screenshots/04-spot-detail.jpg) | ![Explore map](docs/screenshots/05-explore.jpg) |
+
+| Choose location | Spot details | Saved | Profile | Edit profile |
+| --- | --- | --- | --- | --- |
+| ![Choose location](docs/screenshots/06-create-location.jpg) | ![Spot details form](docs/screenshots/07-create-details.jpg) | ![Saved places](docs/screenshots/08-saved.jpg) | ![Profile](docs/screenshots/09-profile.jpg) | ![Edit profile](docs/screenshots/10-edit-profile.jpg) |
+
+### Demo walkthrough
+
+1. Launch the app and choose **Create an account**. Submit empty to see validation, then enter valid details to reach the feed.
+2. Open a feed card to see its detail, then go back.
+3. On **Explore**, tap a marker to preview the matching spot.
+4. Tap **+**, confirm the pinned location, fill in the details, pick tags and a budget, and preview the spot.
+5. On **Profile**, edit the display name and save, then open **Saved places**.
+
+### Phase 1 placeholders
+
+Everything runs on local mock data; nothing is persisted between launches.
+
+- Sign in and registration validate input, then open the feed without creating a session. The Profile tab always shows the sample user.
+- Profile edits live only in memory and do not change author names on existing spots. Avatar upload shows a "Phase 2" notice.
+- Like, Save, Comment, and Share buttons on the spot detail show placeholder notices; card bookmark icons are decorative. The Saved list is seeded from `sampleSavedSpotIds`.
+- Photo selection, map tiles, and publishing are local previews. Publishing does not add the spot to the feed.
+
+## Phase 2 Contract
+
+These interfaces are frozen at the end of Phase 1. Phase 2 implements them against Supabase without changing screen code. Propose any change in the team channel first.
+
+**Models** (`lib/models/`)
+
+| Model | Fields |
+| --- | --- |
+| `Profile` | `id`, `username`, `displayName?`, `avatarUrl?`, `bio?`, `joinedAt?` |
+| `Spot` | `id`, `author` (`Profile`), `caption`, `createdAt`, `placeName?`, `latitude?`, `longitude?`, `photoReference?`, `tags`, `budgetLabel?`, `likeCount?` |
+| `Comment` | `id`, `spotId`, `author` (`Profile`), `text`, `createdAt` |
+
+**Repository** (`SpotRepository`): `listSpots` (newest first), `getSpot`, `createSpot`, `editSpot`, `deleteSpot`, `likeSpot`, `unlikeSpot`, `saveSpot`, `unsaveSpot`, `listSavedSpots` (newest first), `listComments`, `addComment`. `SpotProvider` exposes the loaded feed to widgets.
+
+**Routes** (`AppRoutes`)
+
+| Route | Screen | Argument |
+| --- | --- | --- |
+| `/login` | Welcome (initial route) | — |
+| `/sign-in`, `/register` | Auth form | — |
+| `/`, `/explore`, `/saved`, `/profile` | Main shell on that tab | — |
+| `/create` → `/create/details` → `/create/review` | Create-a-spot flow | `CreateSpotReviewArgs` for review |
+| `/spot-detail` | Spot detail | `Spot` |
+| `/profile/edit` | Edit profile; pops the updated `Profile` | `Profile` |
+
+**Owner boundaries:** unchanged; see the workstream table below.
 
 ## Architecture and Integration Rules
 
