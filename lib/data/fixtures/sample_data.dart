@@ -50,6 +50,8 @@ final sampleSpots = <Spot>[
   ),
 ];
 
+const sampleSavedSpotIds = {'spot-2', 'spot-3'};
+
 final sampleComments = <Comment>[
   Comment(
     id: 'comment-1',

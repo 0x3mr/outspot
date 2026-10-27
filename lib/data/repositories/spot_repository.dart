@@ -20,6 +20,8 @@ abstract class SpotRepository {
 
   Future<void> unsaveSpot(String id);
 
+  Future<List<Spot>> listSavedSpots();
+
   Future<List<Comment>> listComments(String spotId);
 
   Future<Comment> addComment(Comment comment);
