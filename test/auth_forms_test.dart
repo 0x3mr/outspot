@@ -161,6 +161,25 @@ void main() {
       expect(find.text('Feed stub'), findsOneWidget);
     });
 
+    testWidgets('keyboard Next moves from password to confirmation', (
+      tester,
+    ) async {
+      await tester.pumpWidget(_authApp());
+
+      await tester.tap(_field('Password'));
+      await tester.pump();
+      await tester.testTextInput.receiveAction(TextInputAction.next);
+      await tester.pump();
+
+      final confirm = tester.widget<EditableText>(
+        find.descendant(
+          of: _field('Confirm password'),
+          matching: find.byType(EditableText),
+        ),
+      );
+      expect(confirm.focusNode.hasFocus, isTrue);
+    });
+
     testWidgets('links back to sign in', (tester) async {
       await tester.pumpWidget(_authApp());
 
