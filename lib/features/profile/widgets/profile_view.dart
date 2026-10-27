@@ -42,7 +42,7 @@ class ProfileView extends StatelessWidget {
     );
 
     return ListView(
-      padding: AppSpacing.page,
+      padding: AppSpacing.pageFor(MediaQuery.sizeOf(context).width),
       children: [
         AppPagePadding(
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),

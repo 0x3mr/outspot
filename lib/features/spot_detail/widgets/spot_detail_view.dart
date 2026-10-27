@@ -21,7 +21,7 @@ class SpotDetailView extends StatelessWidget {
         .toList();
 
     return ListView(
-      padding: AppSpacing.page,
+      padding: AppSpacing.pageFor(MediaQuery.sizeOf(context).width),
       children: [
         // 1. Photo Banner with Fallback & Overlay Badges
         _buildPhotoHeader(context),

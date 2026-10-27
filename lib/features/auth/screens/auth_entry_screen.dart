@@ -13,49 +13,51 @@ class AuthEntryScreen extends StatelessWidget {
     body: SafeArea(
       child: AppPagePadding(
         child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 420),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Icon(
-                  Icons.explore,
-                  size: 52,
-                  color: Theme.of(context).colorScheme.primary,
-                ),
-                const SizedBox(height: AppSpacing.md),
-                Text(
-                  'Outspot',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.headlineMedium,
-                ),
-                const SizedBox(height: AppSpacing.xs),
-                Text(
-                  'Find places worth sharing.',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: AppSpacing.xl),
-                AppButton(
-                  label: 'Sign in',
-                  onPressed: () =>
-                      Navigator.pushNamed(context, AppRoutes.signIn),
-                ),
-                const SizedBox(height: AppSpacing.sm),
-                AppButton(
-                  label: 'Create an account',
-                  style: AppButtonStyle.secondary,
-                  onPressed: () =>
-                      Navigator.pushNamed(context, AppRoutes.register),
-                ),
-                const SizedBox(height: AppSpacing.md),
-                TextButton(
-                  onPressed: () =>
-                      Navigator.pushReplacementNamed(context, AppRoutes.feed),
-                  child: const Text('Explore the preview'),
-                ),
-              ],
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 420),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Icon(
+                    Icons.explore,
+                    size: 52,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  Text(
+                    'Outspot',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.headlineMedium,
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Text(
+                    'Find places worth sharing.',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
+                  const SizedBox(height: AppSpacing.xl),
+                  AppButton(
+                    label: 'Sign in',
+                    onPressed: () =>
+                        Navigator.pushNamed(context, AppRoutes.signIn),
+                  ),
+                  const SizedBox(height: AppSpacing.sm),
+                  AppButton(
+                    label: 'Create an account',
+                    style: AppButtonStyle.secondary,
+                    onPressed: () =>
+                        Navigator.pushNamed(context, AppRoutes.register),
+                  ),
+                  const SizedBox(height: AppSpacing.md),
+                  TextButton(
+                    onPressed: () =>
+                        Navigator.pushReplacementNamed(context, AppRoutes.feed),
+                    child: const Text('Explore the preview'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

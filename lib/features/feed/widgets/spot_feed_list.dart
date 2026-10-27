@@ -22,7 +22,7 @@ class SpotFeedList extends StatelessWidget {
     }
 
     return ListView.builder(
-      padding: AppSpacing.page,
+      padding: AppSpacing.pageFor(MediaQuery.sizeOf(context).width),
       itemCount: spots.length,
       itemBuilder: (context, index) => Padding(
         padding: const EdgeInsets.only(bottom: AppSpacing.md),
