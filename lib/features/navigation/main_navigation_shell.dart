@@ -30,7 +30,12 @@ class MainNavigationShell extends StatefulWidget {
 class _MainNavigationShellState extends State<MainNavigationShell> {
   late int _selectedIndex;
 
-  static const _titles = ['Feed', 'Explore', 'Saved', 'Profile'];
+  static const _tabRoutes = [
+    AppRoutes.feed,
+    AppRoutes.explore,
+    AppRoutes.saved,
+    AppRoutes.profile,
+  ];
   static const _pages = [
     FeedScreen(),
     ExploreScreen(),
@@ -46,7 +51,7 @@ class _MainNavigationShellState extends State<MainNavigationShell> {
 
   @override
   Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(title: Text(_titles[_selectedIndex])),
+    appBar: AppBar(title: Text(AppRoutes.titles[_tabRoutes[_selectedIndex]]!)),
     body: IndexedStack(index: _selectedIndex, children: _pages),
     floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     floatingActionButton: Container(
