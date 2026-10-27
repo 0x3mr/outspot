@@ -2,10 +2,12 @@ import '../../models/comment.dart';
 import '../../models/profile.dart';
 import '../../models/spot.dart';
 
-const sampleProfile = Profile(
+final sampleProfile = Profile(
   id: 'profile-1',
   username: 'outspot_user',
   displayName: 'Outspot Explorer',
+  bio: 'Collecting quiet cafes, rooftop views, and gardens around Cairo.',
+  joinedAt: DateTime.utc(2025, 12, 14),
 );
 
 final sampleSpots = <Spot>[

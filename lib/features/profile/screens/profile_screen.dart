@@ -1,56 +1,60 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-import '../../../core/theme/app_spacing.dart';
-import '../../../core/widgets/app_button.dart';
-import '../../../core/widgets/app_page_padding.dart';
+import '../../../core/navigation/app_routes.dart';
 import '../../../data/fixtures/sample_data.dart';
-import '../../feed/widgets/spot_card.dart';
+import '../../../data/repositories/spot_provider.dart';
+import '../../../models/profile.dart';
+import '../widgets/profile_view.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
   @override
-  Widget build(BuildContext context) => ListView(
-    padding: AppSpacing.page,
-    children: [
-      AppPagePadding(
-        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
-        child: Column(
-          children: [
-            CircleAvatar(
-              radius: 38,
-              backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
-              child: Icon(
-                Icons.person,
-                size: 38,
-                color: Theme.of(context).colorScheme.primary,
-              ),
-            ),
-            const SizedBox(height: AppSpacing.sm),
-            Text(
-              sampleProfile.displayName ?? sampleProfile.username,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
-            Text('@${sampleProfile.username}'),
-            const SizedBox(height: AppSpacing.md),
-            AppButton(
-              label: 'Edit profile',
-              style: AppButtonStyle.secondary,
-              onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Profile editing is coming soon.'),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-      const SizedBox(height: AppSpacing.sm),
-      Text('Your spots', style: Theme.of(context).textTheme.titleMedium),
-      const SizedBox(height: AppSpacing.sm),
-      for (final spot in sampleSpots.where(
-        (spot) => spot.author.id == sampleProfile.id,
-      )) ...[SpotCard(spot: spot), const SizedBox(height: AppSpacing.sm)],
-    ],
-  );
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  // The signed-in profile is mocked until auth lands in P2-02.
+  Profile _profile = sampleProfile;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final provider = context.read<SpotProvider>();
+      if (provider.spots.isEmpty && !provider.isLoading) provider.loadSpots();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = context.watch<SpotProvider>();
+    return ProfileView(
+      profile: _profile,
+      spots: [
+        for (final spot in provider.spots)
+          if (spot.author.id == _profile.id) spot,
+      ],
+      isLoadingSpots: provider.isLoading,
+      onEditProfile: _editProfile,
+      onOpenSpot: (spot) =>
+          Navigator.pushNamed(context, AppRoutes.spotDetail, arguments: spot),
+      onCreateSpot: () => Navigator.pushNamed(context, AppRoutes.createSpot),
+    );
+  }
+
+  Future<void> _editProfile() async {
+    final result = await Navigator.pushNamed(
+      context,
+      AppRoutes.editProfile,
+      arguments: _profile,
+    );
+    if (!mounted || result is! Profile) return;
+    setState(() => _profile = result);
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(const SnackBar(content: Text('Profile updated')));
+  }
 }

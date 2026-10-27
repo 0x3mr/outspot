@@ -8,6 +8,7 @@ class AppRoutes {
   static const createSpotReview = '/create/review';
   static const saved = '/saved';
   static const profile = '/profile';
+  static const editProfile = '/profile/edit';
   static const spotDetail = '/spot-detail';
   static const login = '/login';
   static const signIn = '/sign-in';
@@ -21,6 +22,7 @@ class AppRoutes {
     createSpotReview: 'Review spot',
     saved: 'Saved',
     profile: 'Profile',
+    editProfile: 'Edit profile',
     spotDetail: 'Spot Detail',
     login: 'Welcome',
     signIn: 'Sign in',
