@@ -4,17 +4,24 @@ import '../fixtures/sample_data.dart';
 import 'spot_repository.dart';
 
 class MockSpotRepository implements SpotRepository {
+  MockSpotRepository({Set<String>? savedSpotIds})
+    : _savedSpotIds = {...(savedSpotIds ?? sampleSavedSpotIds)};
+
   final List<Spot> _spots = List.of(sampleSpots);
   final List<Comment> _comments = List.of(sampleComments);
   final Set<String> _likedSpotIds = {};
-  final Set<String> _savedSpotIds = {};
+  final Set<String> _savedSpotIds;
 
   @override
-  Future<List<Spot>> listSpots() async {
-    final sorted = List<Spot>.from(_spots)
-      ..sort((a, b) => b.createdAt.compareTo(a.createdAt));
-    return List.unmodifiable(sorted);
-  }
+  Future<List<Spot>> listSpots() async => _newestFirst(_spots);
+
+  @override
+  Future<List<Spot>> listSavedSpots() async =>
+      _newestFirst(_spots.where((spot) => _savedSpotIds.contains(spot.id)));
+
+  List<Spot> _newestFirst(Iterable<Spot> spots) => List.unmodifiable(
+    List<Spot>.of(spots)..sort((a, b) => b.createdAt.compareTo(a.createdAt)),
+  );
 
   @override
   Future<Spot?> getSpot(String id) async {

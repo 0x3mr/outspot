@@ -5,6 +5,7 @@ import '../../../core/navigation/app_routes.dart';
 import '../../../data/fixtures/sample_data.dart';
 import '../../../data/repositories/spot_provider.dart';
 import '../../../models/profile.dart';
+import '../../navigation/main_navigation_shell.dart';
 import '../widgets/profile_view.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -42,7 +43,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
       onOpenSpot: (spot) =>
           Navigator.pushNamed(context, AppRoutes.spotDetail, arguments: spot),
       onCreateSpot: () => Navigator.pushNamed(context, AppRoutes.createSpot),
+      onOpenSaved: _openSaved,
     );
+  }
+
+  void _openSaved() {
+    if (MainNavigationShell.selectTab(
+      context,
+      MainNavigationShell.savedTabIndex,
+    )) {
+      return;
+    }
+    Navigator.pushNamed(context, AppRoutes.saved);
   }
 
   Future<void> _editProfile() async {
